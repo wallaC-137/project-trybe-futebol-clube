@@ -33,6 +33,7 @@ SequelizeTeams.init({
   underscored: true,
 });
 
+export default SequelizeTeams;
 // OtherModel.belongsTo(SequelizeTeams, { foreignKey: 'campoA', as: 'campoEstrangeiroA' });
 
 /**
@@ -45,5 +46,3 @@ SequelizeTeams.init({
 
 // Example.hasMany(OtherModel, { foreignKey: 'campoC', as: 'campoEstrangeiroC' });
 // Example.hasMany(OtherModel, { foreignKey: 'campoD', as: 'campoEstrangeiroD' });
-
-export default SequelizeTeams;

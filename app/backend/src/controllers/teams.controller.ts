@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
-import BookService from '../services/teams.service';
+import TeamService from '../services/teams.service';
 
 export default class TeamsController {
   constructor(
-    private teamService: BookService = new BookService(),
+    private teamService: TeamService = new TeamService(),
   ) { }
 
   public async getAllTeams(req: Request, res: Response) {
-    const { data } = await this.teamService.getAllTeams();
-    res.status(200).json(data);
+    // const data = { status: 'SUCCESSFUL', data: [{ id: 1, teamName: 'Team 1' }] };
+    const response = await this.teamService.getAllTeams();
+    res.status(200).json(response.data);
   }
 }
