@@ -1,5 +1,6 @@
 // import { NewEntity } from '../Interfaces';
 import * as bcrypt from 'bcryptjs';
+import { Role } from '../Interfaces/users/Role';
 import { ILogin } from '../Interfaces/users/IUser';
 import { Token } from '../Interfaces/users/Token';
 import SequelizeUsers from '../database/models/SequelizeUsers';
@@ -41,6 +42,17 @@ export default class UsersModel implements IUserModel {
     const token: Token = jwtUtils.sign({ id, username });
 
     return token;
+  }
+
+  public async getRole(user: Token): Promise<Role | null> {
+    const payload = jwtUtils.verify(user);
+    if (!payload) return null;
+
+    const dbData = await this.model.findOne({ where: { id: payload.id } });
+    if (!dbData) return null;
+
+    const { role } = dbData.dataValues;
+    return role as Role;
   }
 
   // public async findById(id: ITeam['id']): Promise<ITeam | null> {

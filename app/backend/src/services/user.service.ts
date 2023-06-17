@@ -2,7 +2,8 @@ import { ILogin } from '../Interfaces/users/IUser';
 import UserModel from '../models/users.model';
 import { ServiceResponse } from '../Interfaces/ServiceResponse';
 import { IUserModel } from '../Interfaces/users/IUserModel';
-import { TokenResponse } from '../Interfaces/users/Token';
+import { Token, TokenResponse } from '../Interfaces/users/Token';
+import { RoleResponse } from '../Interfaces/users/Role';
 
 export default class UserService {
   constructor(
@@ -15,6 +16,11 @@ export default class UserService {
     return { status: 'SUCCESSFUL', data: { token: isOk } };
   }
 
+  public async getRole(user: Token): Promise<ServiceResponse<RoleResponse>> {
+    const isOk = await this.userModel.getRole(user);
+    if (!isOk) return { status: 'NOT_FOUND', data: { message: 'User not found' } };
+    return { status: 'SUCCESSFUL', data: { role: isOk } };
+  }
   // public async getTeamsById(id: number): Promise<ServiceResponse<ITeam>> {
   //   const team = await this.teamModel.findById(id);
   //   if (team == null) return { status: 'NOT_FOUND', data: { message: `Team ${id} not found` } };
