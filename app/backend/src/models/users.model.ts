@@ -37,7 +37,7 @@ export default class UsersModel implements IUserModel {
     const dbData = await this.model.findOne({ where: { email: user.email } });
     if (!dbData || !bcrypt.compareSync(user.password, dbData.dataValues.password)) return null;
 
-    const { username, id } = dbData.dataValues;
+    const { username, id } = dbData.dataValues; // pode ser que eu tenha que alterar user name para email
     const token: Token = jwtUtils.sign({ id, username });
 
     return token;

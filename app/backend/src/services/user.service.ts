@@ -11,7 +11,7 @@ export default class UserService {
 
   public async login(user: ILogin): Promise<ServiceResponse<TokenResponse>> {
     const isOk = await this.userModel.login(user);
-    if (!isOk) return { status: 'NOT_FOUND', data: { message: 'User not found' } };
+    if (!isOk) return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
     return { status: 'SUCCESSFUL', data: { token: isOk } };
   }
 
