@@ -14,8 +14,9 @@ export default class MatchesModel implements IMatchModel {
   //   return { id, teamName };
   // }
 
-  public async findAll(): Promise<IMatchTeams[]> {
+  public async findAllInProgress(inProgress: string): Promise<IMatchTeams[]> {
     const dbData = await this.model.findAll({
+      where: { inProgress: inProgress === 'true' },
       include: [{
         model: SequelizeTeams, as: 'homeTeam', attributes: ['teamName'],
       }, {
@@ -24,9 +25,24 @@ export default class MatchesModel implements IMatchModel {
     });
 
     return dbData as unknown as IMatchTeams[];
-    // const ww = dbData.map(({ id, teamName }) => (
-    //   { id, teamName }
-    // ));
+  }
+
+  public async findAll(inProgress: string | undefined): Promise<IMatchTeams[]> {
+    if (inProgress === undefined) {
+      const dbData = await this.model.findAll({
+        // raw: true,
+        include: [{
+          model: SequelizeTeams, as: 'homeTeam', attributes: ['teamName'],
+        }, {
+          model: SequelizeTeams, as: 'awayTeam', attributes: ['teamName'],
+        }],
+      });
+
+      return dbData as unknown as IMatchTeams[];
+    }
+
+    const dbData = await this.findAllInProgress(inProgress);
+    return dbData;
   }
 
   // public async findById(id: ITeam['id']): Promise<ITeam | null> {
@@ -36,6 +52,3 @@ export default class MatchesModel implements IMatchModel {
   //   return dbData;
   // }
 }
-
-// const teamsModel = new TeamsModel();
-// (async () => console.log(await teamsModel))();

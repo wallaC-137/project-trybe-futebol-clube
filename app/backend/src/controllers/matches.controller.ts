@@ -9,9 +9,10 @@ export default class MatchesController {
   ) { }
 
   public async getAllMatches(req: Request, res: Response) {
-    // const data = { status: 'SUCCESSFUL', data: [{ id: 1, teamName: 'Team 1' }] };
-    const response = await this.matchService.getAllMatches();
-    res.status(200).json(response.data);
+    const { inProgress } = req.query;
+
+    const { data } = await this.matchService.getAllMatches(inProgress as string | undefined);
+    res.status(200).json(data);
   }
 
   // public async getRole(req: Request, res: Response) {
