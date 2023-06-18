@@ -13,3 +13,7 @@ export interface IMatchTeams extends IMatch {
   homeTeam: teamName;
   awayTeam: teamName;
 }
+
+export interface IMatchFinish {
+  message: string;
+}

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 // import { Token } from '../Interfaces/users/Token';
 import MatchService from '../services/matches.service';
-// import mapStatusHTTP from '../utils/mapStatusHTTP';
+import mapStatusHTTP from '../utils/mapStatusHTTP';
 
 export default class MatchesController {
   constructor(
@@ -12,6 +12,18 @@ export default class MatchesController {
     const { inProgress } = req.query;
 
     const { data } = await this.matchService.getAllMatches(inProgress as string | undefined);
+    res.status(200).json(data);
+  }
+
+  public async finishMatch(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const { status, data } = await this.matchService.finishMatch(id);
+
+    if (status !== 'SUCCESSFUL') {
+      return res.status(mapStatusHTTP(status)).json(data);
+    }
+
     res.status(200).json(data);
   }
 

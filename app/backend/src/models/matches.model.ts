@@ -45,6 +45,12 @@ export default class MatchesModel implements IMatchModel {
     return dbData;
   }
 
+  public async finishMatch(id: string): Promise<number | null> {
+    const [stateChanged] = await this.model.update({ inProgress: false }, { where: { id } });
+    if (stateChanged === 0) return null;
+    return stateChanged;
+  }
+
   // public async findById(id: ITeam['id']): Promise<ITeam | null> {
   //   const dbData = await this.model.findByPk(id);
   //   if (dbData == null) return null;
