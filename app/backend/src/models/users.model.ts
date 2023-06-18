@@ -36,9 +36,9 @@ export default class UsersModel implements IUserModel {
     if (!UsersModel.validateEmailAndPass(user.email, user.password)) return null;
 
     const dbData = await this.model.findOne({ where: { email: user.email } });
-    if (!dbData || !bcrypt.compareSync(user.password, dbData.dataValues.password)) return null;
+    if (!dbData || !bcrypt.compareSync(user.password, dbData.password)) return null;
 
-    const { username, id } = dbData.dataValues; // pode ser que eu tenha que alterar user name para email
+    const { username, id } = dbData; // pode ser que eu tenha que alterar user name para email
     const token: Token = jwtUtils.sign({ id, username });
 
     return token;
@@ -51,7 +51,7 @@ export default class UsersModel implements IUserModel {
     const dbData = await this.model.findOne({ where: { id: payload.id } });
     if (!dbData) return null;
 
-    const { role } = dbData.dataValues;
+    const { role } = dbData;
     return role as Role;
   }
 

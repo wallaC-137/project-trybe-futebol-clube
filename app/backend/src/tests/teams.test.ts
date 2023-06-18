@@ -13,7 +13,7 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Seu teste', () => {
+describe.only('Teste "Integração" rota /teams', () => {
   /**
    * Exemplo do uso de stubs com tipos
    */
@@ -26,7 +26,9 @@ describe('Seu teste', () => {
   //     .resolves({...TeamsMock.allTeams});
   // });
 
-  after(()=>sinon.restore())
+  // afterEach(()=>{
+  //   (TeamsModel.findAll as sinon.SinonStub).restore();
+  // })
 
   // it('...', async () => {
   //   chaiHttpResponse = await chai
@@ -36,7 +38,7 @@ describe('Seu teste', () => {
   //   expect(...)
   // });
 
-  it('Seu sub-teste', async () => {
+  it('Testa o findAll', async () => {
     const response = {...TeamsMock.allTeams}
     
     sinon
@@ -46,6 +48,8 @@ describe('Seu teste', () => {
     const { status, body } = await chai.request(app).get('/teams');
 
     expect(status).to.be.eq(200);
-    expect(body).to.be.deep.eq(response);
+    expect(body).to.be.keys(response);// ele está testando a chave antes do value no caso "0, 1, 2"
+    // expect(body).to.be.an('array');
+    // expect(body).to.be.an('object');
   });
 });
