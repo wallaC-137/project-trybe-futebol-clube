@@ -2,7 +2,7 @@
 import SequelizeTeams from '../database/models/SequelizeTeams';
 import { IMatchModel } from '../Interfaces/matches/IMetchModel';
 import SequelizeMatches from '../database/models/SequelizeMatches';
-import { IMatchTeams } from '../Interfaces/matches/IMetch';
+import { IMatchInProgress, IMatchTeams } from '../Interfaces/matches/IMetch';
 
 export default class MatchesModel implements IMatchModel {
   private model = SequelizeMatches;
@@ -51,6 +51,15 @@ export default class MatchesModel implements IMatchModel {
     return stateChanged;
   }
 
+  public async inProgressMatch(inProgress: IMatchInProgress): Promise<true | null> {
+    const { id, homeTeamGoals, awayTeamGoals } = inProgress;
+    // const [stateChanged] = await this.model.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+    const [stateChanged] = await this.model
+      .update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+    // as home_Team_goals
+    if (stateChanged === 0) return null;
+    return true;
+  }
   // public async findById(id: ITeam['id']): Promise<ITeam | null> {
   //   const dbData = await this.model.findByPk(id);
   //   if (dbData == null) return null;

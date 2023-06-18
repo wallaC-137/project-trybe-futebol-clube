@@ -1,7 +1,7 @@
 import MatchModel from '../models/matches.model';
 import { ServiceResponse } from '../Interfaces/ServiceResponse';
 import { IMatchModel } from '../Interfaces/matches/IMetchModel';
-import { IMatch, IMatchFinish } from '../Interfaces/matches/IMetch';
+import { IMatch, IMatchFinish, IMatchInProgress } from '../Interfaces/matches/IMetch';
 
 export default class MatchesService {
   constructor(
@@ -18,6 +18,17 @@ export default class MatchesService {
     if (match == null) return { status: 'NOT_FOUND', data: { message: `Match ${id} not found` } };
 
     return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
+  }
+
+  public async inProgressMatch(
+    inProgress: IMatchInProgress,
+  ): Promise<ServiceResponse<IMatchFinish>> {
+    const { homeTeamGoals, awayTeamGoals } = inProgress;
+    const match = await this.matchModel.inProgressMatch(inProgress);
+    if (match == null) return { status: 'NOT_FOUND', data: { message: 'Match not found' } };
+
+    return { status: 'SUCCESSFUL',
+      data: { message: `Home team goals: ${homeTeamGoals}, Away team Goals: ${awayTeamGoals}` } };
   }
   // public async getTeamsById(id: number): Promise<ServiceResponse<ITeam>> {
   //   const team = await this.teamModel.findById(id);

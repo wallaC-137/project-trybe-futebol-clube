@@ -27,6 +27,19 @@ export default class MatchesController {
     res.status(200).json(data);
   }
 
+  public async inProgressMatch(req: Request, res: Response) {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+
+    const { status, data } = await this.matchService
+      .inProgressMatch({ id, homeTeamGoals, awayTeamGoals });
+
+    if (status !== 'SUCCESSFUL') {
+      return res.status(mapStatusHTTP(status)).json(data);
+    }
+
+    res.status(200).json(data);
+  }
   // public async getRole(req: Request, res: Response) {
   //   const { authorization } = req.headers;
   //   const { status, data } = await this.userService.getRole(authorization as Token);

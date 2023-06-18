@@ -7,7 +7,7 @@ export interface IMatch {
   inProgress: boolean;
 }
 
-type teamName = string;
+type teamName = number;
 
 export interface IMatchTeams extends IMatch {
   homeTeam: teamName;
@@ -16,4 +16,10 @@ export interface IMatchTeams extends IMatch {
 
 export interface IMatchFinish {
   message: string;
+}
+
+export interface IMatchInProgress {
+  id: string;
+  homeTeamGoals: string ;
+  awayTeamGoals: string ;
 }
