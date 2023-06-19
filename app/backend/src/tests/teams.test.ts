@@ -13,7 +13,7 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe.only('Teste "Integração" rota /teams', () => {
+describe('Teste "Integração" rota /teams', () => {
   /**
    * Exemplo do uso de stubs com tipos
    */
@@ -29,6 +29,12 @@ describe.only('Teste "Integração" rota /teams', () => {
   // afterEach(()=>{
   //   (TeamsModel.findAll as sinon.SinonStub).restore();
   // })
+
+  after(()=> sinon.restore())
+
+  const model = {
+    findByPk: sinon.stub(TeamsModel, "findByPk"),
+  };
 
   // it('...', async () => {
   //   chaiHttpResponse = await chai
@@ -52,4 +58,30 @@ describe.only('Teste "Integração" rota /teams', () => {
     // expect(body).to.be.an('array');
     // expect(body).to.be.an('object');
   });
+  
+  it('Testa o findById com ID VÁLIDO', async () => {
+    const request = TeamsMock.teamByIdModel;
+    const response = TeamsMock.teamById;
+  
+    model.findByPk.onFirstCall().resolves(request);
+  
+    const { status, body } = await chai.request(app).get('/teams/1');
+  
+    expect(status).to.be.eq(200);
+    expect(body).to.be.deep.equal(response);
+  });
+  
+  it('Testa o findById com ID QUE NÃO EXISTE', async () => {
+    const response = TeamsMock.teamByIdNotFound;
+  
+    model.findByPk.onSecondCall().resolves(null);
+  
+    const { status, body } = await chai.request(app).get('/teams/20');
+  
+    expect(status).to.be.eq(404);
+    expect(body).to.be.deep.equal(response);
+  });
+  
 });
+
+

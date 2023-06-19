@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import TeamService from '../services/teams.service';
+import mapStatusHTTP from '../utils/mapStatusHTTP';
 
 export default class TeamsController {
   constructor(
@@ -14,7 +15,10 @@ export default class TeamsController {
 
   public async getTeamsById(req: Request, res: Response) {
     const { id } = req.params;
-    const response = await this.teamService.getTeamsById(Number(id));
-    res.status(200).json(response.data);
+    const { status, data } = await this.teamService.getTeamsById(Number(id));
+
+    if (status !== 'SUCCESSFUL') return res.status(mapStatusHTTP(status)).json(data);
+
+    res.status(200).json(data);
   }
 }

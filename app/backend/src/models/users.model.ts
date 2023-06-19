@@ -36,6 +36,8 @@ export default class UsersModel implements IUserModel {
     if (!UsersModel.validateEmailAndPass(user.email, user.password)) return null;
 
     const dbData = await this.model.findOne({ where: { email: user.email } });
+    // console.log(dbData);
+
     if (!dbData || !bcrypt.compareSync(user.password, dbData.password)) return null;
 
     const { username, id } = dbData; // pode ser que eu tenha que alterar user name para email
@@ -46,9 +48,11 @@ export default class UsersModel implements IUserModel {
 
   public async getRole(user: Token): Promise<Role | null> {
     const payload = jwtUtils.verify(user);
+
     if (!payload) return null;
 
     const dbData = await this.model.findOne({ where: { id: payload.id } });
+
     if (!dbData) return null;
 
     const { role } = dbData;

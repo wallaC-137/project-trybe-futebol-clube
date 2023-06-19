@@ -5,6 +5,7 @@ import jwtUtils from '../utils/jwt.utils';
 export default class TokenValidation {
   public static tokenValidations = (req: Request, res: Response, next: NextFunction) => {
     const { authorization } = req.headers;
+
     if (!authorization) {
       return res.status(mapStatusHTTP('UNAUTHORIZED'))
         .json({ message: 'Token not found' });
