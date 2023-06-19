@@ -11,6 +11,12 @@ router.get(
   (req: Request, res: Response) => matchController.getAllMatches(req, res),
 );
 
+router.post(
+  '/',
+  TokenValidation.tokenValidations,
+  (req: Request, res: Response) => matchController.createMatch(req, res),
+);
+
 router.patch(
   '/:id/finish',
   TokenValidation.tokenValidations,

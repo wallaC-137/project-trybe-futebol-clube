@@ -23,3 +23,10 @@ export interface IMatchInProgress {
   homeTeamGoals: string ;
   awayTeamGoals: string ;
 }
+
+export interface IMatchCreate {
+  homeTeamId: string;
+  awayTeamId: string;
+  homeTeamGoals: string;
+  awayTeamGoals: string;
+}

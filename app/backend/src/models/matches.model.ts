@@ -1,18 +1,36 @@
 // import { NewEntity } from '../Interfaces';
 import SequelizeTeams from '../database/models/SequelizeTeams';
+import TeamsModel from './teams.model';
 import { IMatchModel } from '../Interfaces/matches/IMetchModel';
 import SequelizeMatches from '../database/models/SequelizeMatches';
-import { IMatchInProgress, IMatchTeams } from '../Interfaces/matches/IMetch';
+import { IMatch, IMatchCreate, IMatchInProgress, IMatchTeams } from '../Interfaces/matches/IMetch';
 
 export default class MatchesModel implements IMatchModel {
   private model = SequelizeMatches;
+  private static modelTeams = new TeamsModel();
 
-  // async create(data: NewEntity<ITeam>): Promise<ITeam> {
-  //   const dbData = await this.model.create(data);
+  private static async teamsExist(homeTeamId: number, awayTeamId: number): Promise<boolean> {
+    const time = await MatchesModel.modelTeams.findById(homeTeamId);
+    const time2 = await MatchesModel.modelTeams.findById(awayTeamId);
+    return time === null || time2 === null;
+  }
 
-  //   const { id, teamName }: ITeam = dbData;
-  //   return { id, teamName };
-  // }
+  async createMatch(data: IMatchCreate): Promise<IMatch | null> {
+    const { homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = data;
+
+    const algo = await MatchesModel.teamsExist(+homeTeamId, +awayTeamId);
+    if (algo) return null;
+    console.log(algo);
+    // const algo = await this.modelTeams.findById(+homeTeamId);
+    const result = await this.model
+      .create({ homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals, inProgress: true });
+
+    return result as unknown as IMatch;
+    // const dbData = await this.model.create(data);
+
+    // const { id, teamName }: ITeam = dbData;
+    // return { id, teamName };
+  }
 
   public async findAllInProgress(inProgress: string): Promise<IMatchTeams[]> {
     const dbData = await this.model.findAll({

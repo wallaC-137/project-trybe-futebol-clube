@@ -1,7 +1,7 @@
-import { IMatchInProgress, IMatchTeams } from './IMetch';
+import { IMatch, IMatchCreate, IMatchInProgress, IMatchTeams } from './IMetch';
 
 export interface IMatchModel {
-  // create(data: Partial<IMatch>): Promise<IMatch>,
+  createMatch(data: Partial<IMatchCreate>): Promise<IMatch | null>,
   findAll(inProgress: string | undefined): Promise<IMatchTeams[]>,
   findAllInProgress(inProgress: string): Promise<IMatchTeams[]>,
   finishMatch(id: string): Promise<number | null>,
