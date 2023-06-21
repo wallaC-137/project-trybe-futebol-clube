@@ -8,7 +8,7 @@ export interface ILeaderboards {
   goalsFavor: number;
   goalsOwn: number;
   goalsBalance: number;
-  efficiency: number;
+  efficiency: string;
 }
 
 // type teamName = number;
