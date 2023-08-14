@@ -1,4 +1,4 @@
-import {Model, QueryInterface, DataTypes} from 'sequelize';
+import { Model, QueryInterface, DataTypes } from 'sequelize';
 import { ITeam } from '../../Interfaces/teams/ITeam';
 
 export default {
@@ -14,10 +14,10 @@ export default {
         type: DataTypes.STRING,
         allowNull: false,
         field: 'team_name',
-      }
-    })
+      },
+    });
   },
   down(queryInterface: QueryInterface) {
     return queryInterface.dropTable('teams');
-  }
+  },
 };
